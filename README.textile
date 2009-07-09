@@ -1,8 +1,10 @@
 h2. Description
+
 This is a set of tool to Record your google latitude in a DB
 and get it back with a KML with all the positions.
 
 h2. Installation
+
 # git clone git://github.com/copernic67/latitudeTools.git
 # move _config.php to config.php and edit it with your own values
 # Use _DB.sql to create the needed database
@@ -10,5 +12,6 @@ h2. Installation
 # calling DB2KML.php will get you a KML file with all the pois in the DB
 
 h2. TODO
+
 * Add params for limiting the KML size
 * Fix the timestamp in the KML (Not Working)
