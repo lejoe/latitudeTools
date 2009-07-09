@@ -68,7 +68,7 @@ while ($row = @mysql_fetch_assoc($result))
   $placeNode->appendChild($styleUrl);
   
   $timestampNode = $dom->createElement('TimeStamp');
-  $whenNode = $dom->createElement('when', $row['timestamp']);
+  $whenNode = $dom->createElement('when', date('c', strtotime($row['timestamp'])));
   $timestampNode->appendChild($whenNode);
   $placeNode->appendChild($timestampNode);
   
