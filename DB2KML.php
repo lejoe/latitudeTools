@@ -60,7 +60,7 @@ while ($row = @mysql_fetch_assoc($result))
   $placeNode->setAttribute('id', 'placemark' . $row['id']);
 
   // Create name, and description elements and assigns them the values of the name and address columns from the results.
-  $nameNode = $dom->createElement('name',htmlentities($row['reversedLocation']));
+  $nameNode = $dom->createElement('name',htmlspecialchars_decode($row['reversedLocation']));
   $placeNode->appendChild($nameNode);
   $descNode = $dom->createElement('description', 'accurency: ' . $row['accurency'] . 'm');
   $placeNode->appendChild($descNode);
