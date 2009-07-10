@@ -14,3 +14,4 @@ h2. Installation
 h2. TODO
 
 * Add params for limiting the KML size
+* Fix the encoding issues (reversedLocation are wrong in the DB)
