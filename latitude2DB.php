@@ -14,9 +14,9 @@ $accurency = $json->features[0]->properties->accuracyInMeters;
 $timeStamp = $json->features[0]->properties->timeStamp;
 $reverseLocation = $json->features[0]->properties->reverseGeocode;
 
-if ( ! $coord ) 
+if ( ! $coord ){
     exit('This user doesn\'t exist.');
-
+}
 $date = date('Y-m-d H:i:s', $timeStamp );
 $lat = $coord[1];
 $lon = $coord[0];
