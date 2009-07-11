@@ -1,14 +1,14 @@
 <?php
 require('config.php');
- 
+
 $url = 'http://www.google.com/latitude/apps/badge/api?user='.$latitudeUserId.'&type=json';
- 
+
 // We get the content
 $content = file_get_contents( $url );
- 
+
 // We convert the JSON to an object
 $json = json_decode( $content );
- 
+
 $coord = $json->features[0]->geometry->coordinates;
 $accurency = $json->features[0]->properties->accuracyInMeters;
 $timeStamp = $json->features[0]->properties->timeStamp;
