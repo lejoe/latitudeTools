@@ -41,7 +41,7 @@ if (!$db_selected){
 }
 
 // Selects all the rows before dateEnd and after dateStart
-$query = 'SELECT * FROM latitudeRecorder WHERE UNIX_TIMESTAMP(`timestamp`) >=  \''.$dateStart.'\' AND UNIX_TIMESTAMP(`timestamp`) <=  \''.$dateEnd.'\'';
+$query = 'SELECT * FROM latitudeRecorder WHERE UNIX_TIMESTAMP(`timestamp`) >=  \''.$dateStart.'\' AND UNIX_TIMESTAMP(`timestamp`) <=  \''.$dateEnd.'\' ORDER BY id';
 $result = mysql_query($query);
 if (!$result) {
     die('Invalid query: ' . mysql_error());
@@ -69,37 +69,58 @@ $userIconstyleNode->appendChild($userIconNode);
 $userStyleNode->appendChild($userIconstyleNode);
 $docNode->appendChild($userStyleNode);
 
+$previousTimestamp = null;
+$previousTimestampNode = null;
+$previousPlaceNode = null;
+
 // Iterates through the MySQL results, creating one Placemark for each row.
 while ($row = @mysql_fetch_assoc($result)){
-    // Creates a Placemark and append it to the Document.
-    
-    $node = $dom->createElement('Placemark');
-    $placeNode = $docNode->appendChild($node);
-    
-    // Creates an id attribute and assign it the value of id column.
-    $placeNode->setAttribute('id', 'placemark' . $row['id']);
-    
-    // Create name, and description elements and assigns them the values of the name and address columns from the results.
-    $nameNode = $dom->createElement('name',htmlspecialchars_decode($row['reversedLocation']));
-    $placeNode->appendChild($nameNode);
-    $descNode = $dom->createElement('description', 'accurency: ' . $row['accurency'] . 'm');
-    $placeNode->appendChild($descNode);
-    $styleUrl = $dom->createElement('styleUrl', '#' . $latitudeUserId . 'Style');
-    $placeNode->appendChild($styleUrl);
-    
-    $timestampNode = $dom->createElement('TimeStamp');
-    $whenNode = $dom->createElement('when', date('c', strtotime($row['timestamp'])));
-    $timestampNode->appendChild($whenNode);
-    $placeNode->appendChild($timestampNode);
-    
-    // Creates a Point element.
-    $pointNode = $dom->createElement('Point');
-    $placeNode->appendChild($pointNode);
-    
-    // Creates a coordinates element and gives it the value of the lng and lat columns from the results.
-    $coorStr = $row['longitude'] . ','  . $row['latitude'];
-    $coorNode = $dom->createElement('coordinates', $coorStr);
-    $pointNode->appendChild($coorNode);
+    $timestamp = $row['timestamp'];
+    if($timestamp != $previousTimestamp){
+        // Creates a Placemark and append it to the Document.
+        $node = $dom->createElement('Placemark');
+        $placeNode = $docNode->appendChild($node);
+        
+        // Creates an id attribute and assign it the value of id column.
+        $placeNode->setAttribute('id', 'placemark' . $row['id']);
+        
+        // Create name, and description elements and assigns them the values of the name and address columns from the results.
+        $nameNode = $dom->createElement('name',htmlspecialchars_decode($row['reversedLocation']));
+        $placeNode->appendChild($nameNode);
+        $descNode = $dom->createElement('description', 'accurency: ' . $row['accurency'] . 'm');
+        $placeNode->appendChild($descNode);
+        $styleUrl = $dom->createElement('styleUrl', '#' . $latitudeUserId . 'Style');
+        $placeNode->appendChild($styleUrl);
+        
+        $timestampNode = $dom->createElement('TimeStamp');
+        
+        
+        $whenNode = $dom->createElement('when', date('c', strtotime($timestamp)));
+        $timestampNode->appendChild($whenNode);
+        $placeNode->appendChild($timestampNode);
+        
+        // Creates a Point element.
+        $pointNode = $dom->createElement('Point');
+        $placeNode->appendChild($pointNode);
+        
+        // Creates a coordinates element and gives it the value of the lng and lat columns from the results.
+        $coorStr = $row['longitude'] . ','  . $row['latitude'];
+        $coorNode = $dom->createElement('coordinates', $coorStr);
+        $pointNode->appendChild($coorNode);
+        
+        $previousTimestamp = $timestamp;
+        $previousTimestampNode = $timestampNode;
+        $previousPlaceNode = $placeNode;
+    }else{
+        $timeSpanNode = $dom->createElement('TimeSpan');
+        $beginNode = $dom->createElement('begin', date('c', strtotime($previousTimestamp)));
+        $endNode = $dom->createElement('end', date('c', strtotime($timestamp)));
+        $timeSpanNode->appendChild($beginNode);
+        $timeSpanNode->appendChild($endNode);
+        
+        $previousPlaceNode->replaceChild($timeSpanNode, $previousTimestampNode);
+        $previousTimestampNode = $timeSpanNode;
+    }
 }
 
 $kmlOutput = $dom->saveXML();
