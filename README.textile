@@ -10,8 +10,10 @@ h2. Installation
 # Use _DB.sql to create the needed database
 # Use a cronjob to call latitude2DB.php as many times as you want
 # calling DB2KML.php will get you a KML file with all the pois in the DB
+    DB2KML.php will display the positions of the current day
+    DB2KML.php?dstart=YYYY-MM-DD will display the positions of that day
+    DB2KML.php?dstart=YYYY-MM-DD&dend=YYYY-MM-DD will display the position of the days in that interval
 
 h2. TODO
 
-* Add params for limiting the KML size
 * Fix the encoding issues (reversedLocation are wrong in the DB)
