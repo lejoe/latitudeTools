@@ -17,4 +17,3 @@ h2. Installation
 h2. TODO
 
 * Fix the encoding issues (reversedLocation are wrong in the DB)
-* Group the placemarks that have the same lat/long are following each others
