@@ -17,5 +17,4 @@ h2. Installation
 h2. TODO
 
 * Fix the encoding issues (reversedLocation are wrong in the DB)
-* Remove the multiple points in the KML when it comes from the same point and the same timestamp
-    Eventually replace then the timestamps by timespans: http://code.google.com/apis/kml/documentation/kmlreference.html#timespan
+* Group the placemarks that have the same lat/long are following each others
