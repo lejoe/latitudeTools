@@ -1,6 +1,31 @@
 <?php
 require('config.php');
 
+ini_set("date.timezone",$defaultTimeZone);
+
+//By default, selecting the current day
+$dateStart = new DateTime();
+$dateEnd = new DateTime();
+
+//Reading the dstart and dend from the get params
+//If dend is not present just select for the dsart day
+if(isset($_GET['dstart']) && strtotime($_GET['dstart']) != false){
+    $dateStart = new DateTime(date('Y-m-d', strtotime($_GET['dstart'])));
+    if(isset($_GET['dend']) && strtotime($_GET['dend']) != false){
+        $dateEnd = new DateTime(date('Y-m-d', strtotime($_GET['dend'])));
+    }else{
+        $dateEnd = new DateTime(date('Y-m-d', strtotime($_GET['dstart'])));
+    }
+}
+
+//Setting the times for the days
+$dateStart->setTime(0, 0, 0);
+$dateEnd->setTime(23, 59, 59);
+
+//Transforming to timestamps (Datetime->gettimestamp comes only with php 5.3)
+$dateStart = strtotime($dateStart->format("Y-m-d H:i:s"));
+$dateEnd = strtotime($dateEnd->format("Y-m-d H:i:s"));
+
 // Opens a connection to a MySQL server.
 
 $connection = mysql_connect ($server, $username, $password);
@@ -15,10 +40,9 @@ if (!$db_selected){
     die('Can\'t use db : ' . mysql_error());
 }
 
-// Selects all the rows in the markers table.
-$query = 'SELECT * FROM latitudeRecorder WHERE 1';
+// Selects all the rows before dateEnd and after dateStart
+$query = 'SELECT * FROM latitudeRecorder WHERE UNIX_TIMESTAMP(`timestamp`) >=  \''.$dateStart.'\' AND UNIX_TIMESTAMP(`timestamp`) <=  \''.$dateEnd.'\'';
 $result = mysql_query($query);
-
 if (!$result) {
     die('Invalid query: ' . mysql_error());
 }

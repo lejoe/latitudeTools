@@ -6,7 +6,10 @@
     $latitudeUserId     = 'XXXXXXXXXXXXXXXXXXX';
     
     // DB
-    $username   = 'yourDBusername';
-    $password   = 'yourDBpassword';
-    $database   = 'yourDBname';
-    $server     = 'yourDBServer';
+    $username           = 'yourDBusername';
+    $password           = 'yourDBpassword';
+    $database           = 'yourDBname';
+    $server             = 'yourDBServer';
+    
+    //Is valid only for the reading
+    $defaultTimeZone    = 'Europe/Zurich';
