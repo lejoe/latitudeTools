@@ -17,9 +17,7 @@ $reverseLocation = $json->features[0]->properties->reverseGeocode;
 if ( ! $coord ){
     exit('This user doesn\'t exist.');
 }
-$date = date('Y-m-d H:i:s', $timeStamp );
-$lat = $coord[1];
-$lon = $coord[0];
+
 
 $con = mysql_connect($server, $username, $password);
 if (!$con){
@@ -27,6 +25,10 @@ if (!$con){
 }
 
 mysql_select_db($database, $con);
+
+$date = date('Y-m-d H:i:s', $timeStamp );
+$lat = $coord[1];
+$lon = $coord[0];
 
 $sqlquery = "INSERT INTO latitudeRecorder (timestamp, latitude, longitude, accurency, reversedLocation)
 VALUES ('$date', '$lat', '$lon', '$accurency', '$reverseLocation')";
