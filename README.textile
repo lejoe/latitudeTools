@@ -5,7 +5,7 @@ and get it back with a KML with all the positions.
 
 h2. Installation
 
-# git clone git://github.com/copernic67/latitudeTools.git
+# git clone git://github.com/lejoe/latitudeTools.git
 # move _config.php to config.php and edit it with your own values
 # Use _DB.sql to create the needed database
 # Use a cronjob to call latitude2DB.php as many times as you want
